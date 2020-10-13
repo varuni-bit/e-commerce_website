@@ -11,13 +11,24 @@
 
     <div class="container">
         <div class="row">
-
+            {% for item in product_objects %}
+            <div class="col-md-3">
+                <div class="card">
+                    <img src="item.image" class="card-img-top">
+                    <div class="card-body">
+                        <div class="card-title">
+                             {{ item.title }}
+                        </div>
+                        <div class="card-text">
+                             {{ item.price }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
         </div>
     </div>
 
 </body>
 </html>
 
-{% for item in product_objects %}
-    {{ item.title }}
-{% endfor %}
