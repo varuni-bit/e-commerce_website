@@ -5,8 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="id=edge">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-<!--    link for static files-css file for style-->
+<!--    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>-->
+
+  <!--jquery code copied from browser-->
+    <script
+  src="https://code.jquery.com/jquery-3.5.1.js"
+  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+  crossorigin="anonymous"></script>
+
+
+    <!--    link for static files-css file for style-->
+
     <link rel="stylesheet" href="{% static 'shop/style.css' %}">
     <title> Document </title>
 
@@ -17,8 +26,8 @@
 
         <div class="row">
             <div class="col-md-12">
-                <div class="card card-sm">
-                    <div class="card-body row no-gytters align-items-center">
+                <form class="card card-sm">
+                    <div class="card-body row no-gutters align-items-center">
                         <div class="col">
                             <input type="search" name='item_name' placeholder="Search for Products" class="form-control form-control-borderless">
                         </div>
@@ -26,7 +35,7 @@
                             <button class="btn btn-success" type="submit"> Search</button>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
 
@@ -42,13 +51,77 @@
                         <div class="card-text">
                             Rs/- {{ item.price }}
                         </div>
+
+                        <a href="/{{item.id}}" class="btn btn-warning"> View </a>
+                        <button id="{{item.id}}" class="btn atc btn-warning"> Add to Cart </button>
+
                     </div>
                 </div>
             </div>
             {% endfor %}
         </div>
+        <div class="row">
+            <div class="col-md-3 offset-md-4">
+                <ul class="pagination">
+                    {% if product_objects.has_previous %}
+
+                        <li class="page-item">
+                        <a class="page-link"  href="?page={{ product_objects.previous_page_number }}"> Previous</a>
+                        </li>
+
+                    {% endif %}
+<!--                        current page-->
+                        <li class="page-item active">
+                        <a class="page-link" href="?page={{ product_objects.number }}"> Current </a>
+                        </li>
+
+
+                    {% if product_objects.has_next %}
+
+                        <li class="page-item">
+                        <a class="page-link"  href="?page={{ product_objects.next_page_number }}"> Next </a>
+                        </li>
+
+
+                    {% endif %}
+
+                </ul>
+            </div>
+        </div>
     </div>
 
 </body>
+<!--javascript code-->
+<script type="text/javascript">
+    console.log('This is working');
+    if(localStorage.getItem('cart')==null)
+    {
+        <!-- json object -->
+        var cart = {};
+    }
+    else
+    {
+        cart = JSON.parse(localStorage.getItem('cart'));
+    }
+
+    $(document).on('click','.atc',function()
+    {
+        console.log(" The add to card button is clicked");
+        var item_id = this.id.toString();
+        console.log(item_id);
+
+        if(cart[item_id] != undefined)
+        {
+            cart[item_id] = cart[item_id] + 1;
+        }
+
+        else
+        {
+            cart[item_id] = 1;
+        }
+        console.log(cart);
+        localStorage.setItem('cart',JSON.stringify(cart));
+    });
+</script>
 </html>
 
